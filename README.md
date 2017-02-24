@@ -1,7 +1,8 @@
 # homebridge-mqtt-switch-tasmota
-Plugin to HomeBridge optimized for work with firmware Sonoff-Tasmota, MQTT.
+Plugin to HomeBridge optimized for work with Itead Sonoff hardware with firmware Sonoff-Tasmota, MQTT.
 
 HomeBridge config file:
+
 "accessories": [
     {
 		"accessory": "mqtt-switch-tasmota",
