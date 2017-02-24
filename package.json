@@ -1,0 +1,28 @@
+{
+  "name": "homebridge-mqtt-switch-tasmota",
+  "version": "0.0.1",
+  "description": "Plugin to HomeBridge optimized for work with Itead Sonoff hardware with firmware Sonoff-Tasmota, MQTT.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MacWyznawca/homebridge-mqtt-switch-tasmota.git"
+  },
+  "keywords": [
+    "homebridge",
+    "homekit",
+    "sonoff",
+    "tasmota",
+	"itead",
+	"switch",
+	"outlet"
+  ],
+  "author": "Jaromir Kopp",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MacWyznawca/homebridge-mqtt-switch-tasmota/issues"
+  },
+  "homepage": "https://github.com/MacWyznawca/homebridge-mqtt-switch-tasmota#readme"
+}
