@@ -13,7 +13,6 @@
 	"accessories": [
 	    {
 			"accessory": "mqtt-switch-tasmota",
-			"switchType": "outlet",
 		
 			"name": "NAME OF THIS ACCESSORY",
 		
@@ -25,19 +24,7 @@
 				"statusGet": "stat/sonoff/POWER",
 				"statusSet": "cmnd/sonoff/power",
 				"stateGet": "tele/sonoff/STATE"
-			},
-			"onValue": "ON",
-			"offValue": "OFF",
-		
-			"activityTopic": "tele/sonoff/LWT",
-	        "activityParameter": "Online",
-        
-			"startCmd": "cmnd/sonoff/TelePeriod",
-			"startParameter": "60",
-
-			"manufacturer": "ITEAD",
-			"model": "Sonoff",
-			"serialNumberMAC": "MAC OR SERIAL NUMBER"
+			}
 		}
 	]
 }
