@@ -89,13 +89,13 @@ function MqttSwitchTasmotaAccessory(log, config) {
 		this.activityTopic = "";
 	  	this.activityParameter = "";
 	}
+	  	
+  	this.name = config["name"] || "Sonoff";
+    this.manufacturer = config['manufacturer'] || "ITEAD";
+ 	this.model = config['model'] || "Sonoff";
+	this.serialNumberMAC = config['serialNumberMAC'] || "";
 	
-  	this.name = config["name"];
   	this.outlet = (config["switchType"] !== undefined) ? ((config["switchType"] == "outlet") ? true : false) : false;
-  	
-  	this.manufacturer = (config["manufacturer"] !== undefined) ? config['manufacturer'] :  "ITEAD";
-  	this.manufacturer = (config["model"] !== undefined) ? config['model'] :  "Sonoff";
-  	this.manufacturer = (config["serialNumberMAC"] !== undefined) ? config['serialNumberMAC'] : "0";
 
 	this.switchStatus = false;
 	
