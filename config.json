@@ -17,22 +17,22 @@
 		
 			"name": "NAME OF THIS ACCESSORY",
 		
-			"url": "mqtt://MQTT-ADDRESS",
+			"url": "mqtt://MQTT–BROKER-ADDRESS",
 			"username": "MQTT USER NAME",
 			"password": "MQTT PASSWORD",
 		
 			"topics": {
-				"statusGet": "stat/MQTT/POWER",
-				"statusSet": "cmnd/MQTT/power",
-				"stateGet": "tele/MQTT/STATE"
+				"statusGet": "stat/sonoff/POWER",
+				"statusSet": "cmnd/sonoff/power",
+				"stateGet": "tele/sonoff/STATE"
 			},
 			"onValue": "ON",
 			"offValue": "OFF",
 		
-			"activityTopic": "tele/MQTT/LWT",
+			"activityTopic": "tele/sonoff/LWT",
 	        "activityParameter": "Online",
         
-			"startCmd": "cmnd/MQTT/TelePeriod",
+			"startCmd": "cmnd/sonoff/TelePeriod",
 			"startParameter": "60",
 
 			"manufacturer": "ITEAD",

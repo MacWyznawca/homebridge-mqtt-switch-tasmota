@@ -76,7 +76,7 @@ function MqttSwitchTasmotaAccessory(log, config) {
 	
 	this.topicStatusGet	= config["topics"].statusGet;
 	this.topicStatusSet	= config["topics"].statusSet;
-	this.topicsStateGet	= config["topics"].stateGet;
+	this.topicsStateGet	= (config["topics"].stateGet  !== undefined) ? config["topics"].stateGet : "";
 
     this.onValue = (config["onValue"] !== undefined) ? config["onValue"]: "ON";
     this.offValue = (config["offValue"] !== undefined) ? config["offValue"]: "OFF";
@@ -166,7 +166,9 @@ function MqttSwitchTasmotaAccessory(log, config) {
 		}
 	});
     this.client.subscribe(this.topicStatusGet);
-    this.client.subscribe(this.topicsStateGet);
+	if(this.topicsStateGet !== ""){
+	  	this.client.subscribe(this.topicsStateGet);
+ 	}
 	if(this.activityTopic !== ""){
 	  	this.client.subscribe(this.activityTopic);
  	}
