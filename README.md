@@ -3,13 +3,14 @@ Plugin to HomeBridge optimized for work with Itead Sonoff hardware and firmware 
 
 [MacWyznawca.pl](http://macwyznawca.pl)
 
-# Installation
+Like this? Please buy me a beer (or coffee) please ;-) <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=CK56Q7SFHEHSW"><img src="http://macwyznawca.pl/donate-paypal.png" alt="Donate a coder" data-canonical-src="http://macwyznawca.pl/donate-paypal.svg" style="max-width:100%;"></a>
+
+Installation
 --------------------
     sudo npm install -g homebridge-mqtt-switch-tasmota
 
-# Sample HomeBridge Configuration (complete)
+Sample HomeBridge Configuration (complete)
 --------------------
-
  {
 
     "bridge": {
@@ -50,14 +51,13 @@ Plugin to HomeBridge optimized for work with Itead Sonoff hardware and firmware 
 			"manufacturer": "ITEAD",
 			"model": "Sonoff",
 			"serialNumberMAC": "MAC OR SERIAL NUMBER OR EMPTY"
-		}]
- }
+		}
+	]
+}
 
-# Sample HomeBridge Configuration (minimal)
+Sample HomeBridge Configuration (minimal)
 --------------------
-
 {
-
     "bridge": {
         "name": "Homebridge",
         "username": "CC:22:3D:E3:CE:30",
@@ -65,30 +65,35 @@ Plugin to HomeBridge optimized for work with Itead Sonoff hardware and firmware 
         "pin": "031-45-154"
     },
     
-    "description": "This is an example MINIMAL configuration file.",
+    "description": "This is an example configuration file. You can use this as a template for creating your own configuration file.",
 
     "platforms": [],
-	  "accessories": [
-	  {
-		"accessory": "mqtt-switch-tasmota",
+	
+	"accessories": [
+	    {
+			"accessory": "mqtt-switch-tasmota",
 		
-		"name": "NAME OF THIS ACCESSORY",
+			"name": "NAME OF THIS ACCESSORY",
 		
-		"url": "mqtt://MQTT–BROKER-ADDRESS",
-		"username": "MQTT USER NAME",
-		"password": "MQTT PASSWORD",
+			"url": "mqtt://MQTT–BROKER-ADDRESS",
+			"username": "MQTT USER NAME",
+			"password": "MQTT PASSWORD",
 		
-		"topics": {
-			"statusGet": "stat/sonoff/POWER",
-			"statusSet": "cmnd/sonoff/power"
-    }]
- }
+			"topics": {
+				"statusGet": "stat/sonoff/POWER",
+				"statusSet": "cmnd/sonoff/power",
+				"stateGet": "tele/sonoff/STATE"
+			}
+		}
+	]
+}
+
 
 # Description of the configuration file.
 
-**"switchType": "outlet"** - outet for outlet emulation, other or empty for switch.
+**"switchType": "outlet"** - outlet for outlet emulation, other or empty for switch.
 
-**sonoff** in topics - topics name of Your Sonoff switch.
+**sonoff** in topic - topics name of Your Sonoff switch.
 
 **"stateGet": "tele/sonoff/STATE"** - topic for cyclic telemetry information.
 
