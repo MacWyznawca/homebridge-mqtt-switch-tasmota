@@ -3,12 +3,13 @@ Plugin to HomeBridge optimized for work with Itead Sonoff hardware and firmware 
 
 [MacWyznawca.pl](http://macwyznawca.pl)
 
-Installation
+# Installation
 --------------------
     sudo npm install -g homebridge-mqtt-switch-tasmota
 
-Sample HomeBridge Configuration (complete)
+# Sample HomeBridge Configuration (complete)
 --------------------
+
  {
 
     "bridge": {
@@ -49,12 +50,12 @@ Sample HomeBridge Configuration (complete)
 			"manufacturer": "ITEAD",
 			"model": "Sonoff",
 			"serialNumberMAC": "MAC OR SERIAL NUMBER OR EMPTY"
-		}
-	]
-}
+		}]
+ }
 
-Sample HomeBridge Configuration (minimal)
+# Sample HomeBridge Configuration (minimal)
 --------------------
+
 {
 
     "bridge": {
@@ -80,9 +81,8 @@ Sample HomeBridge Configuration (minimal)
 		"topics": {
 			"statusGet": "stat/sonoff/POWER",
 			"statusSet": "cmnd/sonoff/power"
-    }
-	]
-}
+    }]
+ }
 
 # Description of the configuration file.
 
