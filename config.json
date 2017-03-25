@@ -22,7 +22,7 @@
 			"password": "MQTT PASSWORD",
 		
 			"topics": {
-				"statusGet": "stat/sonoff/POWER",
+				"statusGet": "stat/sonoff/RESULT",
 				"statusSet": "cmnd/sonoff/power",
 				"stateGet": "tele/sonoff/STATE"
 			},

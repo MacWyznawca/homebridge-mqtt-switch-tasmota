@@ -22,7 +22,7 @@ Sample HomeBridge Configuration (complete)
     },
     
     "description": "This is an example configuration file. You can use this as a template for creating your own configuration file.",
-
+	
     "platforms": [],
 	  "accessories": [
 	    {
@@ -36,8 +36,8 @@ Sample HomeBridge Configuration (complete)
 			"password": "MQTT PASSWORD",
 		
 			"topics": {
-				"statusGet": "stat/sonoff/POWER",
-				"statusSet": "cmnd/sonoff/power",
+				"statusGet": "stat/sonoff/RESULT",
+				"statusSet": "cmnd/sonoff/POWER",
 				"stateGet": "tele/sonoff/STATE"
 			},
 			"onValue": "ON",
@@ -48,7 +48,7 @@ Sample HomeBridge Configuration (complete)
         
 			"startCmd": "cmnd/sonoff/TelePeriod",
 			"startParameter": "60",
-
+			
 			"manufacturer": "ITEAD",
 			"model": "Sonoff",
 			"serialNumberMAC": "MAC OR SERIAL NUMBER OR EMPTY"
@@ -59,6 +59,7 @@ Sample HomeBridge Configuration (complete)
 Sample HomeBridge Configuration (minimal)
 --------------------
 {
+	
     "bridge": {
         "name": "Homebridge",
         "username": "CC:22:3D:E3:CE:30",
@@ -67,7 +68,7 @@ Sample HomeBridge Configuration (minimal)
     },
     
     "description": "This is an example configuration file. You can use this as a template for creating your own configuration file.",
-
+	
     "platforms": [],
 	
 	"accessories": [
@@ -82,8 +83,7 @@ Sample HomeBridge Configuration (minimal)
 		
 			"topics": {
 				"statusGet": "stat/sonoff/POWER",
-				"statusSet": "cmnd/sonoff/power",
-				"stateGet": "tele/sonoff/STATE"
+				"statusSet": "cmnd/sonoff/POWER"
 			}
 		}
 	]
@@ -105,4 +105,6 @@ Sample HomeBridge Configuration (minimal)
 **"startCmd": "cmnd/sonoff/TelePeriod"** -  command sent after the connection.
 
 **"startParameter": "60"** - payload for **startCmd**.
+
+**"statusGet": "stat/sonoff/RESULT"** - is for Tasmota firmware relays only! For toher use: **"statusGet": "stat/sonoff/POWER"**
 

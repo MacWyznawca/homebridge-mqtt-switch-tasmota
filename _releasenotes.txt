@@ -1,0 +1,8 @@
+/* 
+ * 0.9.5 20170325
+ * Fixed two and more channel relays power state. 
+ * "Readme" and config example actualisation.
+ *
+ * 0.0.1 20170227
+ * First npm public release.
+ */

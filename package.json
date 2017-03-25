@@ -1,6 +1,6 @@
 {
   "name": "homebridge-mqtt-switch-tasmota",
-  "version": "0.1.0",
+  "version": "0.9.5",
   "description": "Plugin to HomeBridge optimized for work with Itead Sonoff and Electrodragon Relay Board hardware with firmware Sonoff-Tasmota via MQTT.",
   "main": "index.js",
   "scripts": {
@@ -26,7 +26,8 @@
     "tasmota",
     "Sonoff-Tasmota",
 	"electrodragon",
-	"Wifi IoT Relay Board"
+	"Wifi IoT Relay Board",
+	"Relay"
   ],
   "author": "Jaromir Kopp",
   "license": "MIT",
