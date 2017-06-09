@@ -142,7 +142,11 @@ function MqttSwitchTasmotaAccessory(log, config) {
 }
 
 MqttSwitchTasmotaAccessory.prototype.getStatus = function(callback) {
-	callback(null, this.switchStatus);
+	if (this.activeStat) {
+		callback(null, this.switchStatus);
+	} else {
+		callback(no_response);		
+	}
 }
 
 MqttSwitchTasmotaAccessory.prototype.setStatus = function(status, callback, context) {
