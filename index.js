@@ -106,11 +106,20 @@ function MqttSwitchTasmotaAccessory(log, config) {
 	this.client.on('message', function(topic, message) {
 		if (topic == that.topicStatusGet) {
 			try {
+				// In the event that the user has a DUAL the topicStatusGet will return for POWER1 or POWER2 in the JSON.  
+				// We need to coordinate which accessory is actually being reported and only take that POWER data.  
+				// This assumes that the Sonoff single will return the value { "POWER" : "ON" }
 				var data = JSON.parse(message);
 				var status = data.POWER;
-				that.switchStatus = (status == that.onValue);
+				if(data.hasOwnProperty(that.powerValue)){
+				  var status = data[that.powerValue];
+				  that.switchStatus = (status == that.onValue);
+				  that.log(that.name, "(",that.powerValue,") - Power from Status", status); //TEST ONLY
+				}
+				
 			} catch (e) {
 				var status = message.toString();
+
 				that.switchStatus = (status == that.onValue);
 			}
 			that.service.getCharacteristic(Characteristic.On).setValue(that.switchStatus, undefined, 'fromSetValue');
@@ -121,7 +130,7 @@ function MqttSwitchTasmotaAccessory(log, config) {
 				var data = JSON.parse(message);
 				if (data.hasOwnProperty(that.powerValue)) {
 					var status = data[that.powerValue];
-					that.log(that.name, " - Power from State", status); //TEST ONLY
+					that.log(that.name, "(",that.powerValue,") - Power from State", status); //TEST ONLY
 					that.switchStatus = (status == that.onValue);
 					that.service.getCharacteristic(Characteristic.On).setValue(that.switchStatus, undefined, '');
 				}
