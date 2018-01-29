@@ -66,7 +66,8 @@ function MqttSwitchTasmotaAccessory(log, config) {
 	this.serialNumberMAC = config['serialNumberMAC'] || "";
 
 	this.outlet = (config["switchType"] !== undefined) ? ((config["switchType"] == "outlet") ? true : false) : false;
-
+    this.lightBulb = (config["switchType"] !== undefined) ? ((config["switchType"] == "lightbulb") ? true : false) : false;
+	
 	this.switchStatus = false;
 
 	if (this.outlet) {
@@ -74,6 +75,8 @@ function MqttSwitchTasmotaAccessory(log, config) {
 		this.service
 			.getCharacteristic(Characteristic.OutletInUse)
 			.on('get', this.getOutletUse.bind(this));
+	} else if (this.outlet) {
+		this.service = new Service.Lightbulb(this.name);
 	} else {
 		this.service = new Service.Switch(this.name);
 	}
