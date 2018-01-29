@@ -1,4 +1,4 @@
-// Sonoff-Tasmota Switch/Outlet Accessory plugin for HomeBridge
+// Sonoff-Tasmota Switch/Outlet/Lightbulb Accessory plugin for HomeBridge
 // Jaromir Kopp @MacWyznawca
 
 'use strict';
