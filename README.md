@@ -1,6 +1,6 @@
 # homebridge-mqtt-switch-tasmota
 
-Plugin to HomeBridge optimized for work with Itead Sonoff and Electrodragon Relay Board hardware and firmware [Sonoff-Tasmota](https://github.com/arendst/Sonoff-Tasmota) via MQTT. It acts as a switch or outlet (depending of configuration).
+Plugin to HomeBridge optimized for work with Itead Sonoff and Electrodragon Relay Board hardware and firmware [Sonoff-Tasmota](https://github.com/arendst/Sonoff-Tasmota) via MQTT. It acts as a switch or light bulb or outlet (depending of configuration).
 
 Like this? Please buy me a beer (or coffee)  ;-) <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=CK56Q7SFHEHSW"><img src="http://macwyznawca.pl/donate-paypal2.png" alt="Donate a coder" data-canonical-src="http://macwyznawca.pl/donate-paypal.svg" style="max-width:100%;"></a>
 
@@ -90,9 +90,43 @@ Sample HomeBridge Configuration (minimal)
 }
 
 
+Sample HomeBridge Lightbulb Configuration (minimal)
+--------------------
+{
+	
+    "bridge": {
+        "name": "Homebridge",
+        "username": "CC:22:3D:E3:CE:30",
+        "port": 51826,
+        "pin": "031-45-154"
+    },
+    
+    "description": "This is an example configuration file. You can use this as a template for creating your own configuration file.",
+	
+    "platforms": [],
+	
+	"accessories": [
+	    {
+			"accessory": "mqtt-switch-tasmota",
+		    "switchType": "lightbulb",
+			
+			"name": "NAME OF THIS ACCESSORY",
+		
+			"url": "mqtt://MQTT–BROKER-ADDRESS",
+			"username": "MQTT USER NAME",
+			"password": "MQTT PASSWORD",
+		
+			"topics": {
+				"statusGet": "stat/sonoff/POWER",
+				"statusSet": "cmnd/sonoff/POWER"
+			}
+		}
+	]
+}
+
 # Description of the configuration file.
 
-**"switchType": "outlet"** - outlet for outlet emulation, other or empty for switch.
+**"switchType": "outlet"** - outlet for outlet emulation, "lightbulb"** - lightbulb for light bulb emulation or empty for switch.
 
 **sonoff** in topic - topics name of Your Sonoff switch.
 
