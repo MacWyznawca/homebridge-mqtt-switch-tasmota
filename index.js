@@ -152,15 +152,18 @@ function MqttSwitchTasmotaAccessory(log, config) {
 
 MqttSwitchTasmotaAccessory.prototype.getStatus = function(callback) {
 	if (this.activeStat) {
+		this.log("Power state for '%s' is %s", this.name, this.switchStatus);
 		callback(null, this.switchStatus);
 	} else {
-		callback(null);		
+		this.log("'%s' is offline", this.name);
+		callback('No Response');
 	}
 }
 
 MqttSwitchTasmotaAccessory.prototype.setStatus = function(status, callback, context) {
 	if (context !== 'fromSetValue') {
 		this.switchStatus = status;
+		this.log("Set power state on '%s' to %s", this.name, status);
 		this.client.publish(this.topicStatusSet, status ? this.onValue : this.offValue, this.publish_options);
 	}
 	callback();
