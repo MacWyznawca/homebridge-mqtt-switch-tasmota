@@ -43,9 +43,9 @@ function MqttSwitchTasmotaAccessory(log, config) {
 
 	this.topicStatusGet = config["topics"].statusGet;
 	this.topicStatusSet = config["topics"].statusSet;
-	this.topicsStateGet = (config["topics"].stateGet !== undefined) ? config["topics"].stateGet : "";
 	this.topicDimmerSet = (config["topics"].dimmerSet !== undefined) ? config["topics"].dimmerSet : ""; // Add new config "dimmerSet" to represent dimmer set topic
-
+	this.topicsStateGet = (config["topics"].stateGet !== undefined) ? config["topics"].stateGet : "";
+	
 	this.onValue = (config["onValue"] !== undefined) ? config["onValue"] : "ON";
 	this.offValue = (config["offValue"] !== undefined) ? config["offValue"] : "OFF";
 
