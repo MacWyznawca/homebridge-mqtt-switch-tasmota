@@ -44,7 +44,7 @@ function MqttSwitchTasmotaAccessory(log, config) {
 	this.topicStatusGet = config["topics"].statusGet;
 	this.topicStatusSet = config["topics"].statusSet;
 	this.topicsStateGet = (config["topics"].stateGet !== undefined) ? config["topics"].stateGet : "";
-	this.topicDimmerSet = (config["topics"].dimmerSet !== undefined) ? config["topics"].dimmerSet : "";
+	this.topicDimmerSet = (config["topics"].dimmerSet !== undefined) ? config["topics"].dimmerSet : ""; // Add new config "dimmerSet" to represent dimmer set topic
 
 	this.onValue = (config["onValue"] !== undefined) ? config["onValue"] : "ON";
 	this.offValue = (config["offValue"] !== undefined) ? config["offValue"] : "OFF";
@@ -53,6 +53,7 @@ function MqttSwitchTasmotaAccessory(log, config) {
 	this.powerValue = powerVal[powerVal.length-1]
 	this.log('Nazwa do RESULT ',this.powerValue);
 	
+	// if dimmerSet available, device support brightness and command (i.e. Dimmer) can be use as key from JSON result
 	if (this.topicDimmerSet !== ""){
 		let dimmerVal = this.topicDimmerSet.split("/");
 		this.dimmerValue = dimmerVal[dimmerVal.length-1]
@@ -93,9 +94,10 @@ function MqttSwitchTasmotaAccessory(log, config) {
 		.on('get', this.getStatus.bind(this))
 		.on('set', this.setStatus.bind(this));
 	
+	// Add Brightness Characteristic
 	if (this.topicDimmerSet !== ""){
 		this.service
-			.addCharacteristic(Characteristic.brightness)
+			.addCharacteristic(Characteristic.Brightness)
 			.on('get', this.getDimmerStatus.bind(this))
 			.on('set', this.setDimmerStatus.bind(this))
 	}
@@ -133,6 +135,7 @@ function MqttSwitchTasmotaAccessory(log, config) {
 				  that.switchStatus = (status == that.onValue);
 				  that.log(that.name, "(",that.powerValue,") - Power from Status", status); //TEST ONLY
 				}
+				// handling dimmer result from JSON
 				if(data.hasOwnProperty(that.dimmerValue)){
 				  var status = data[that.dimmerValue];
 				  that.dimmerStatus = status;
@@ -156,6 +159,7 @@ function MqttSwitchTasmotaAccessory(log, config) {
 					that.switchStatus = (status == that.onValue);
 					that.service.getCharacteristic(Characteristic.On).setValue(that.switchStatus, undefined, '');
 				}
+				// update brightness value from status topic
 				if (data.hasOwnProperty(that.dimmerValue)) {
 					var status = data[that.dimmerValue];
 					that.log(that.name, "(",that.dimmerValue,") - Dimmer from State", status); //TEST ONLY
@@ -191,10 +195,11 @@ MqttSwitchTasmotaAccessory.prototype.getStatus = function(callback) {
 	}
 }
 
+// Function update homekit current brightness value
 MqttSwitchTasmotaAccessory.prototype.getDimmerStatus = function(callback) {
-	if (typeof this.activeDimmerStat !== undefined) {
-		this.log("Dimmer state for '%s' is %s", this.name, this.DimmerStatus);
-		callback(null, this.DimmerStatus);
+	if (this.topicDimmerSet !== "") {
+		this.log("Dimmer state for '%s' is %s", this.name, this.dimmerStatus);
+		callback(null, this.dimmerStatus);
 	} 
 }
 
@@ -207,6 +212,7 @@ MqttSwitchTasmotaAccessory.prototype.setStatus = function(status, callback, cont
 	callback();
 }
 
+// Function to publish set brightness value as request from homekit
 MqttSwitchTasmotaAccessory.prototype.setDimmerStatus = function(status, callback, context) {
 	if (context !== 'fromSetValue') {
 		this.DimmerStatus = status;
