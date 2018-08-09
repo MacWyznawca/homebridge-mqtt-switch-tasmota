@@ -136,11 +136,11 @@ function MqttSwitchTasmotaAccessory(log, config) {
 				  that.log(that.name, "(",that.powerValue,") - Power from Status", status); //TEST ONLY
 				}
 				// handling dimmer result from JSON
-				if(data.hasOwnProperty(that.dimmerValue)){
+				if(that.topicDimmerSet!=="" && data.hasOwnProperty(that.dimmerValue)){
 				  var status = data[that.dimmerValue];
 				  that.dimmerStatus = status;
 				  that.log(that.name, "(",that.dimmerValue,") - Dimmer from Status", status); //TEST ONLY
-				  that.service.getCharacteristic(Characteristic.Brightness).setValue(that.dimmerValue, undefined, 'fromSetValue');
+				  that.service.getCharacteristic(Characteristic.Brightness).setValue(that.dimmerStatus, undefined, 'fromSetValue');
 				}
 				
 			} catch (e) {
@@ -160,7 +160,7 @@ function MqttSwitchTasmotaAccessory(log, config) {
 					that.service.getCharacteristic(Characteristic.On).setValue(that.switchStatus, undefined, '');
 				}
 				// update brightness value from status topic
-				if (data.hasOwnProperty(that.dimmerValue)) {
+				if (that.topicDimmerSet!=="" && data.hasOwnProperty(that.dimmerValue)) {
 					var status = data[that.dimmerValue];
 					that.log(that.name, "(",that.dimmerValue,") - Dimmer from State", status); //TEST ONLY
 					that.DimmerStatus = status;
