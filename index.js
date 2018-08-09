@@ -44,6 +44,7 @@ function MqttSwitchTasmotaAccessory(log, config) {
 	this.topicStatusGet = config["topics"].statusGet;
 	this.topicStatusSet = config["topics"].statusSet;
 	this.topicsStateGet = (config["topics"].stateGet !== undefined) ? config["topics"].stateGet : "";
+	this.topicDimmerSet = (config["topics"].dimmerSet !== undefined) ? config["topics"].dimmerSet : "";
 
 	this.onValue = (config["onValue"] !== undefined) ? config["onValue"] : "ON";
 	this.offValue = (config["offValue"] !== undefined) ? config["offValue"] : "OFF";
@@ -51,6 +52,12 @@ function MqttSwitchTasmotaAccessory(log, config) {
 	let powerVal = this.topicStatusSet.split("/");
 	this.powerValue = powerVal[powerVal.length-1]
 	this.log('Nazwa do RESULT ',this.powerValue);
+	
+	if (this.topicDimmerSet !== ""){
+		let dimmerVal = this.topicDimmerSet.split("/");
+		this.dimmerValue = dimmerVal[dimmerVal.length-1]
+		this.log('Nazwa do RESULT ',this.dimmerValue);
+	}
 
 	if (config["activityTopic"] !== undefined && config["activityParameter"] !== undefined) {
 		this.activityTopic = config["activityTopic"];
@@ -66,7 +73,7 @@ function MqttSwitchTasmotaAccessory(log, config) {
 	this.serialNumberMAC = config['serialNumberMAC'] || "";
 
 	this.outlet = (config["switchType"] !== undefined) ? ((config["switchType"] == "outlet") ? true : false) : false;
-    this.lightbulb = (config["switchType"] !== undefined) ? ((config["switchType"] == "lightbulb") ? true : false) : false;
+    	this.lightbulb = (config["switchType"] !== undefined) ? ((config["switchType"] == "lightbulb") ? true : false) : false;
 	
 	this.switchStatus = false;
 
@@ -85,6 +92,13 @@ function MqttSwitchTasmotaAccessory(log, config) {
 		.getCharacteristic(Characteristic.On)
 		.on('get', this.getStatus.bind(this))
 		.on('set', this.setStatus.bind(this));
+	
+	if (this.topicDimmerSet !== ""){
+		this.service
+			.addCharacteristic(Characteristic.brightness)
+			.on('get', this.getDimmerStatus.bind(this))
+			.on('set', this.setDimmerStatus.bind(this))
+	}
 
 	if (this.activityTopic !== "") {
 		this.service.addOptionalCharacteristic(Characteristic.StatusActive);
@@ -119,10 +133,15 @@ function MqttSwitchTasmotaAccessory(log, config) {
 				  that.switchStatus = (status == that.onValue);
 				  that.log(that.name, "(",that.powerValue,") - Power from Status", status); //TEST ONLY
 				}
+				if(data.hasOwnProperty(that.dimmerValue)){
+				  var status = data[that.dimmerValue];
+				  that.dimmerStatus = status;
+				  that.log(that.name, "(",that.dimmerValue,") - Dimmer from Status", status); //TEST ONLY
+				  that.service.getCharacteristic(Characteristic.Brightness).setValue(that.dimmerValue, undefined, 'fromSetValue');
+				}
 				
 			} catch (e) {
 				var status = message.toString();
-
 				that.switchStatus = (status == that.onValue);
 			}
 			that.service.getCharacteristic(Characteristic.On).setValue(that.switchStatus, undefined, 'fromSetValue');
@@ -137,6 +156,12 @@ function MqttSwitchTasmotaAccessory(log, config) {
 					that.switchStatus = (status == that.onValue);
 					that.service.getCharacteristic(Characteristic.On).setValue(that.switchStatus, undefined, '');
 				}
+				if (data.hasOwnProperty(that.dimmerValue)) {
+					var status = data[that.dimmerValue];
+					that.log(that.name, "(",that.dimmerValue,") - Dimmer from State", status); //TEST ONLY
+					that.DimmerStatus = status;
+					that.service.getCharacteristic(Characteristic.Brightness).setValue(that.DimmerStatus, undefined, '');
+				}
 			} catch (e) {}
 		} else if (topic == that.activityTopic) {
 			var status = message.toString();
@@ -144,10 +169,13 @@ function MqttSwitchTasmotaAccessory(log, config) {
 			that.service.setCharacteristic(Characteristic.StatusActive, that.activeStat);
 		}
 	});
+	
 	this.client.subscribe(this.topicStatusGet);
+	
 	if (this.topicsStateGet !== "") {
 		this.client.subscribe(this.topicsStateGet);
 	}
+	
 	if (this.activityTopic !== "") {
 		this.client.subscribe(this.activityTopic);
 	}
@@ -163,11 +191,27 @@ MqttSwitchTasmotaAccessory.prototype.getStatus = function(callback) {
 	}
 }
 
+MqttSwitchTasmotaAccessory.prototype.getDimmerStatus = function(callback) {
+	if (typeof this.activeDimmerStat !== undefined) {
+		this.log("Dimmer state for '%s' is %s", this.name, this.DimmerStatus);
+		callback(null, this.DimmerStatus);
+	} 
+}
+
 MqttSwitchTasmotaAccessory.prototype.setStatus = function(status, callback, context) {
 	if (context !== 'fromSetValue') {
 		this.switchStatus = status;
 		this.log("Set power state on '%s' to %s", this.name, status);
 		this.client.publish(this.topicStatusSet, status ? this.onValue : this.offValue, this.publish_options);
+	}
+	callback();
+}
+
+MqttSwitchTasmotaAccessory.prototype.setDimmerStatus = function(status, callback, context) {
+	if (context !== 'fromSetValue') {
+		this.DimmerStatus = status;
+		this.log("Set brightness on '%s' to %s", this.name, status);
+		this.client.publish(this.topicDimmerSet, status);
 	}
 	callback();
 }
