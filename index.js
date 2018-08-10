@@ -1,5 +1,9 @@
 // Sonoff-Tasmota Switch/Outlet/Lightbulb Accessory plugin for HomeBridge
 // Jaromir Kopp @MacWyznawca
+//
+// 10/Aug/18 	Add brightness support:
+// 		To enable dimmer, define "dimmerSet" topic
+// 		If use tasmota, please ensure SetOption20 is "On"
 
 'use strict';
 
@@ -157,14 +161,14 @@ function MqttSwitchTasmotaAccessory(log, config) {
 					var status = data[that.powerValue];
 					that.log(that.name, "(",that.powerValue,") - Power from State", status); //TEST ONLY
 					that.switchStatus = (status == that.onValue);
-					that.service.getCharacteristic(Characteristic.On).setValue(that.switchStatus, undefined, '');
+					that.service.getCharacteristic(Characteristic.On).setValue(that.switchStatus, undefined, 'fromSetValue');
 				}
 				// update brightness value from status topic
 				if (that.topicDimmerSet!=="" && data.hasOwnProperty(that.dimmerValue)) {
 					var status = data[that.dimmerValue];
 					that.log(that.name, "(",that.dimmerValue,") - Dimmer from State", status); //TEST ONLY
 					that.DimmerStatus = status;
-					that.service.getCharacteristic(Characteristic.Brightness).setValue(that.DimmerStatus, undefined, '');
+					that.service.getCharacteristic(Characteristic.Brightness).setValue(that.DimmerStatus, undefined, 'fromSetValue');
 				}
 			} catch (e) {}
 		} else if (topic == that.activityTopic) {
@@ -217,7 +221,7 @@ MqttSwitchTasmotaAccessory.prototype.setDimmerStatus = function(status, callback
 	if (context !== 'fromSetValue') {
 		this.DimmerStatus = status;
 		this.log("Set brightness on '%s' to %s", this.name, status);
-		this.client.publish(this.topicDimmerSet, status);
+		this.client.publish(this.topicDimmerSet, status.toString());
 	}
 	callback();
 }
