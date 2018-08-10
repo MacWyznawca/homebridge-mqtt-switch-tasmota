@@ -152,9 +152,7 @@ function MqttSwitchTasmotaAccessory(log, config) {
 				that.switchStatus = (status == that.onValue);
 			}
 			that.service.getCharacteristic(Characteristic.On).setValue(that.switchStatus, undefined, 'fromSetValue');
-		}
-
-		if (topic == that.topicsStateGet) {
+		} else if (topic == that.topicsStateGet) {
 			try {
 				var data = JSON.parse(message);
 				if (data.hasOwnProperty(that.powerValue)) {
