@@ -201,10 +201,8 @@ MqttSwitchTasmotaAccessory.prototype.getStatus = function(callback) {
 
 // Function update homekit current brightness value
 MqttSwitchTasmotaAccessory.prototype.getDimmerStatus = function(callback) {
-	if (this.topicDimmerSet !== "") {
-		this.log("Dimmer state for '%s' is %s", this.name, this.dimmerStatus);
-		callback(null, this.dimmerStatus);
-	} 
+	this.log("Dimmer state for '%s' is %s", this.name, this.dimmerStatus);
+	callback(null, this.dimmerStatus);
 }
 
 MqttSwitchTasmotaAccessory.prototype.setStatus = function(status, callback, context) {
