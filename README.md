@@ -38,6 +38,7 @@ Sample HomeBridge Configuration (complete)
 			"topics": {
 				"statusGet": "stat/sonoff/RESULT",
 				"statusSet": "cmnd/sonoff/POWER",
+				"dimmerSet": "cmnd/sonoff/Dimmer", //Optional
 				"stateGet": "tele/sonoff/STATE"
 			},
 			"onValue": "ON",
