@@ -110,7 +110,7 @@ function MqttSwitchTasmotaAccessory(log, config) {
 				// We need to coordinate which accessory is actually being reported and only take that POWER data.  
 				// This assumes that the Sonoff single will return the value { "POWER" : "ON" }
 				var data = JSON.parse(message);
-				var status = data.POWER;
+				var status = data[that.powerValue];
 				if(data.hasOwnProperty(that.powerValue)){
 				  var status = data[that.powerValue];
 				  that.switchStatus = (status == that.onValue);
