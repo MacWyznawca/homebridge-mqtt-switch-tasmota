@@ -111,12 +111,12 @@ function MqttSwitchTasmotaAccessory(log, config) {
 				// This assumes that the Sonoff single will return the value { "POWER" : "ON" }
 				var data = JSON.parse(message);
 				var status = data.POWER;
-				if(data.hasOwnProperty(that.powerValue)){
-				  var status = data[that.powerValue];
-				  that.switchStatus = (status == that.onValue);
-				  that.log(that.name, "(",that.powerValue,") - Power from Status", status); //TEST ONLY
+				if (data.hasOwnProperty(that.powerValue))
+					status = data[that.powerValue];
+				if (status !== undefined) {
+					that.switchStatus = (status == that.onValue);
+				  	that.log(that.name, "(",that.powerValue,") - Power from Status", status); //TEST ONLY
 				}
-				
 			} catch (e) {
 				var status = message.toString();
 
