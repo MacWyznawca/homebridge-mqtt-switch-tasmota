@@ -1,4 +1,7 @@
 /* 
+ * 0.9.9 20190413
+ * Added support to more then 1 possible topic (POWER) in RESULT - it will check based on field in topic and if has any data
+ * 
  * 0.9.5 20170325
  * Fixed two and more channel relays power state. 
  * "Readme" and config example actualisation.
