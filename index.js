@@ -92,62 +92,61 @@ function MqttSwitchTasmotaAccessory(log, config) {
 
 
 	this.client = mqtt.connect(this.url, this.options);
-	var that = this;
 	this.client.on('error', function() {
-		that.log('Error event on MQTT');
-	});
+		this.log('Error event on MQTT');
+	}.bind(this));
 
 	this.client.on('connect', function() {
-		if (config["startCmd"] !== undefined && config["startParameter"] !== undefined) {
-			that.client.publish(config["startCmd"], config["startParameter"]);
+		this.client.subscribe(this.topicStatusGet);
+		if (this.topicsStateGet !== "") {
+			this.client.subscribe(this.topicsStateGet);
 		}
-	});
+		if (this.activityTopic !== "") {
+			this.client.subscribe(this.activityTopic);
+		}
+		if (config["startCmd"] !== undefined && config["startParameter"] !== undefined) {
+			this.client.publish(config["startCmd"], config["startParameter"]);
+		}
+	}.bind(this));
 
 	this.client.on('message', function(topic, message) {
-		if (topic == that.topicStatusGet) {
+		if (topic == this.topicStatusGet) {
 			try {
 				// In the event that the user has a DUAL the topicStatusGet will return for POWER1 or POWER2 in the JSON.  
 				// We need to coordinate which accessory is actually being reported and only take that POWER data.  
 				// This assumes that the Sonoff single will return the value { "POWER" : "ON" }
 				var data = JSON.parse(message);
 				var status = data.POWER;
-				if (data.hasOwnProperty(that.powerValue))
-					status = data[that.powerValue];
+				if (data.hasOwnProperty(this.powerValue))
+					status = data[this.powerValue];
 				if (status !== undefined) {
-					that.switchStatus = (status == that.onValue);
-				  	that.log(that.name, "(",that.powerValue,") - Power from Status", status); //TEST ONLY
+					this.switchStatus = (status == this.onValue);
+				  	this.log(this.name, "(",this.powerValue,") - Power from Status", status); //TEST ONLY
 				}
 			} catch (e) {
 				var status = message.toString();
 
-				that.switchStatus = (status == that.onValue);
+				this.switchStatus = (status == this.onValue);
 			}
-			that.service.getCharacteristic(Characteristic.On).setValue(that.switchStatus, undefined, 'fromSetValue');
+			this.service.getCharacteristic(Characteristic.On).setValue(this.switchStatus, undefined, 'fromSetValue');
 		}
 
-		if (topic == that.topicsStateGet) {
+		if (topic == this.topicsStateGet) {
 			try {
 				var data = JSON.parse(message);
-				if (data.hasOwnProperty(that.powerValue)) {
-					var status = data[that.powerValue];
-					that.log(that.name, "(",that.powerValue,") - Power from State", status); //TEST ONLY
-					that.switchStatus = (status == that.onValue);
-					that.service.getCharacteristic(Characteristic.On).setValue(that.switchStatus, undefined, '');
+				if (data.hasOwnProperty(this.powerValue)) {
+					var status = data[this.powerValue];
+					this.log(this.name, "(",this.powerValue,") - Power from State", status); //TEST ONLY
+					this.switchStatus = (status == this.onValue);
+					this.service.getCharacteristic(Characteristic.On).setValue(this.switchStatus, undefined, '');
 				}
 			} catch (e) {}
-		} else if (topic == that.activityTopic) {
+		} else if (topic == this.activityTopic) {
 			var status = message.toString();
-			that.activeStat = (status == that.activityParameter);
-			that.service.setCharacteristic(Characteristic.StatusActive, that.activeStat);
+			this.activeStat = (status == this.activityParameter);
+			this.service.setCharacteristic(Characteristic.StatusActive, this.activeStat);
 		}
-	});
-	this.client.subscribe(this.topicStatusGet);
-	if (this.topicsStateGet !== "") {
-		this.client.subscribe(this.topicsStateGet);
-	}
-	if (this.activityTopic !== "") {
-		this.client.subscribe(this.activityTopic);
-	}
+	}.bind(this));
 }
 
 MqttSwitchTasmotaAccessory.prototype.getStatus = function(callback) {
