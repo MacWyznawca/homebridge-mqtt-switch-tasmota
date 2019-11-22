@@ -128,7 +128,7 @@ function MqttSwitchTasmotaAccessory(log, config) {
 
 				this.switchStatus = (status == this.onValue);
 			}
-			this.service.getCharacteristic(Characteristic.On).setValue(this.switchStatus, undefined, 'fromSetValue');
+			this.service.getCharacteristic(Characteristic.On).updateValue(this.switchStatus);
 		}
 
 		if (topic == this.topicsStateGet) {
@@ -138,7 +138,7 @@ function MqttSwitchTasmotaAccessory(log, config) {
 					var status = data[this.powerValue];
 					this.log(this.name, "(",this.powerValue,") - Power from State", status); //TEST ONLY
 					this.switchStatus = (status == this.onValue);
-					this.service.getCharacteristic(Characteristic.On).setValue(this.switchStatus, undefined, '');
+					this.service.getCharacteristic(Characteristic.On).updateValue(this.switchStatus);
 				}
 			} catch (e) {}
 		} else if (topic == this.activityTopic) {
@@ -160,11 +160,9 @@ MqttSwitchTasmotaAccessory.prototype.getStatus = function(callback) {
 }
 
 MqttSwitchTasmotaAccessory.prototype.setStatus = function(status, callback, context) {
-	if (context !== 'fromSetValue') {
-		this.switchStatus = status;
-		this.log("Set power state on '%s' to %s", this.name, status);
-		this.client.publish(this.topicStatusSet, status ? this.onValue : this.offValue, this.publish_options);
-	}
+	this.switchStatus = status;
+	this.log("Set power state on '%s' to %s", this.name, status);
+	this.client.publish(this.topicStatusSet, status ? this.onValue : this.offValue, this.publish_options);
 	callback();
 }
 
